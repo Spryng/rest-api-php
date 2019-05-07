@@ -5,6 +5,7 @@ namespace Spryng\SpryngRestApi\Resources;
 use Spryng\SpryngRestApi\ApiResource;
 use Spryng\SpryngRestApi\Http\HttpClient;
 use Spryng\SpryngRestApi\Http\Request;
+use Spryng\SpryngRestApi\Http\Response;
 
 class Message extends ApiResource
 {
@@ -22,13 +23,25 @@ class Message extends ApiResource
         return $this->encoding;
     }
 
+    /**
+     * Sends the message to the recipients
+     *
+     * @return Response
+     */
     public function send()
     {
-        return new Request(
+        return (new Request(
             $this->api->getBaseUrl(),
             HttpClient::METHOD_POST,
             '/messages'
-        );
+        ))
+            ->withBearerToken($this->api->getApiKey())
+            ->addParameter('encoding', $this->getEncoding())
+            ->addParameter('body', $this->getBody())
+            ->addParameter('route', $this->getRoute())
+            ->addParameter('originator', $this->getOriginator())
+            ->addParameter('recipients', $this->getRecipients())
+            ->send();
     }
 
     /**
