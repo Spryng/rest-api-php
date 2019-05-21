@@ -41,10 +41,13 @@ class HttpClient implements HttpClientInterface
                 throw new \RuntimeException('There is no active request and none is provided.');
             }
         } else {
-            $this->activeRequest = $req;
+            $this->setActiveRequest($req);
         }
 
         $this->setUrl();
+
+        // Don't print the result
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         switch ($this->activeRequest->getHttpMethod())
         {
             case self::METHOD_GET:
@@ -61,16 +64,33 @@ class HttpClient implements HttpClientInterface
                 );
                 break;
         }
+
+        return $this->getLastResponse();
     }
 
     private function executeNoData()
     {
+        // Set the request method to the request
+        curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->activeRequest->getHttpMethod());
+        $this->applyHeaders();
 
+        $rawResponse = curl_exec($this->ch);
+        return Response::constructFromCurlResponse($this->ch, $rawResponse);
     }
 
     private function executeWithData()
     {
+        // Set the request method to the request
+        curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->activeRequest->getHttpMethod());
+        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $this->activeRequest->getRequestDataJson());
 
+        // Since we're sending JSON data, set the content type and length headers
+        $this->activeRequest->addheader('Content-Type', 'application/json');
+        $this->activeRequest->addheader('Content-Length', strlen($this->activeRequest->getRequestDataJson()));
+        $this->applyHeaders();
+
+        $rawResponse = curl_exec($this->ch);
+        return Response::constructFromCurlResponse($this->ch, $rawResponse);
     }
 
     /**
@@ -107,12 +127,19 @@ class HttpClient implements HttpClientInterface
         // Convert associative array of headers with key and value to single string headers
         $headers = array();
         foreach ($this->activeRequest->getHeaders() as $key => $value) {
+            // Apply the user agent header using the CURLOPT_USERAGENT option
+            if (strtolower($key) === 'user-agent')
+            {
+                curl_setopt($this->ch, CURLOPT_USERAGENT, $value);
+                continue;
+            }
             $headers[] = sprintf('%s: %s', $key, $value);
         }
 
         // Set converted headers on the curl instance
         if (count($headers) > 0)
         {
+            curl_setopt($this->ch, CURLOPT_HEADER, true);
             curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
         }
 
@@ -150,5 +177,13 @@ class HttpClient implements HttpClientInterface
     public function getActiveCurlInstance()
     {
         return $this->ch;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getActiveRequest()
+    {
+        return $this->activeRequest;
     }
 }

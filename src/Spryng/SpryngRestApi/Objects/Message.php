@@ -1,19 +1,14 @@
 <?php
 
-namespace Spryng\SpryngRestApi\Resources;
+namespace Spryng\SpryngRestApi\Objects;
 
-use Spryng\SpryngRestApi\ApiResource;
-use Spryng\SpryngRestApi\Http\HttpClient;
-use Spryng\SpryngRestApi\Http\Request;
-use Spryng\SpryngRestApi\Http\Response;
-
-class Message extends ApiResource
+class Message
 {
-    protected $encoding;
+    protected $encoding = 'plain';
     protected $body;
-    protected $route;
+    protected $route = 'business';
     protected $originator;
-    protected $recipients;
+    protected $recipients = array();
 
     /**
      * @return mixed
@@ -24,33 +19,11 @@ class Message extends ApiResource
     }
 
     /**
-     * Sends the message to the recipients
-     *
-     * @return Response
-     */
-    public function send()
-    {
-        return (new Request(
-            $this->api->getBaseUrl(),
-            HttpClient::METHOD_POST,
-            '/messages'
-        ))
-            ->withBearerToken($this->api->getApiKey())
-            ->addParameter('encoding', $this->getEncoding())
-            ->addParameter('body', $this->getBody())
-            ->addParameter('route', $this->getRoute())
-            ->addParameter('originator', $this->getOriginator())
-            ->addParameter('recipients', $this->getRecipients())
-            ->send();
-    }
-
-    /**
      * @param mixed $encoding
      */
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
-        return $this;
     }
 
     /**
@@ -63,13 +36,10 @@ class Message extends ApiResource
 
     /**
      * @param mixed $body
-     * @return Message
      */
     public function setBody($body)
     {
         $this->body = $body;
-
-        return $this;
     }
 
     /**
@@ -86,7 +56,6 @@ class Message extends ApiResource
     public function setRoute($route)
     {
         $this->route = $route;
-        return $this;
     }
 
     /**
@@ -98,16 +67,15 @@ class Message extends ApiResource
     }
 
     /**
-     * @param mixed $originator
+     * @param array $originator
      */
     public function setOriginator($originator)
     {
         $this->originator = $originator;
-        return $this;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getRecipients()
     {
@@ -120,7 +88,6 @@ class Message extends ApiResource
     public function setRecipients($recipients)
     {
         $this->recipients = $recipients;
-        return $this;
     }
 
 

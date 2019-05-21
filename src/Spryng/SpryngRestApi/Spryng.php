@@ -2,26 +2,27 @@
 
 namespace Spryng\SpryngRestApi;
 
-use Spryng\SpryngRestApi\Resources\Balance;
-use Spryng\SpryngRestApi\Resources\Message;
+use Spryng\SpryngRestApi\Http\HttpClient;
+use Spryng\SpryngRestApi\Resources\RefactorClient;
+use Spryng\SpryngRestApi\Resources\MessageClient;
 
 class Spryng
 {
-    const VERSION = '0.1.0';
+    public const VERSION = '0.1.0';
 
     protected $baseUrl = 'https://rest.spryngsms.com/v1';
 
     /**
-     * @var Message
+     * @var MessageClient
      */
     public $message;
 
     /**
-     * @var Balance
+     * @var RefactorClient
      */
     public $balance;
 
-    public $http;
+    public static $http;
 
     protected $apiKey;
 
@@ -32,8 +33,10 @@ class Spryng
             $this->setApiKey($apiKey);
         }
 
-        $this->message = new Message();
-        $this->balance = new Balance();
+        self::$http = new HttpClient();
+
+        $this->message = new MessageClient($this);
+        $this->balance = new RefactorClient($this);
     }
 
     /**
