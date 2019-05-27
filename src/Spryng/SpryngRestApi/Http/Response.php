@@ -2,6 +2,9 @@
 
 namespace Spryng\SpryngRestApi\Http;
 
+use Spryng\SpryngRestApi\Objects\Message;
+use Spryng\SpryngRestApi\Resources\Balance;
+
 class Response
 {
     /**
@@ -17,6 +20,8 @@ class Response
      * @var string
      */
     protected $rawResponse;
+
+    protected $rawBody;
 
     /**
      * The HTTP response code that was received
@@ -35,8 +40,9 @@ class Response
     public static function constructFromCurlResponse($ch, $rawResponse)
     {
         $response = new self();
-        $response->setRawResponse($rawResponse);
         $response->setCurlInstance($ch);
+        $response->setRawResponse($rawResponse);
+        $response->setRawBody($rawResponse);
         $response->setResponseCode(curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
 
         return $response;
@@ -65,7 +71,7 @@ class Response
     /**
      * @param mixed $curlInstance
      */
-    public function setCurlInstance($curlInstance): void
+    public function setCurlInstance($curlInstance)
     {
         $this->curlInstance = $curlInstance;
     }
@@ -81,9 +87,27 @@ class Response
     /**
      * @param mixed $rawResponse
      */
-    public function setRawResponse($rawResponse): void
+    public function setRawResponse($rawResponse)
     {
         $this->rawResponse = $rawResponse;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRawBody()
+    {
+        return $this->rawBody;
+    }
+
+    /**
+     * @param mixed $rawBody
+     */
+    public function setRawBody($rawBody)
+    {
+        $headerSize = curl_getinfo($this->curlInstance, CURLINFO_HEADER_SIZE);
+
+        $this->rawBody = substr($rawBody, $headerSize);
     }
 
     /**
@@ -97,8 +121,24 @@ class Response
     /**
      * @param mixed $responseCode
      */
-    public function setResponseCode($responseCode): void
+    public function setResponseCode($responseCode)
     {
         $this->responseCode = $responseCode;
+    }
+
+    /**
+     * Return a deserialized object from the response
+     *
+     * @return Message|Balance
+     */
+    public function toObject()
+    {
+        // Check if the called url contains 'message' to see if we need to return a Message or Balance instance
+        if (false !== strpos(curl_getinfo($this->curlInstance, CURLINFO_EFFECTIVE_URL), 'messages'))
+        {
+            return new Message($this->getRawBody());
+        }
+
+        return new Balance($this->getRawBody());
     }
 }

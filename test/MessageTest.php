@@ -4,7 +4,6 @@ namespace Spryng\SpryngRestApi\Test;
 
 use PHPUnit\Framework\TestCase;
 use Spryng\SpryngRestApi\Objects\Message;
-use Spryng\SpryngRestApi\Resources\MessageClient;
 use Spryng\SpryngRestApi\Spryng;
 
 date_default_timezone_set('Europe/Amsterdam');
@@ -13,7 +12,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 class MessageTest extends TestCase
 {
     protected $API_KEY;
-    protected $RECIPIENT = [];
+    protected $RECIPIENT = [''];
+    protected $messageId = '';
 
     /**
      * @var Spryng
@@ -38,5 +38,18 @@ class MessageTest extends TestCase
         $response = $this->instance->message->send($message);
 
         $this->assertTrue($response->wasSuccessful());
+    }
+
+    public function testGetMessage()
+    {
+        $response = $this->instance->message->show($this->messageId);
+
+        $this->assertTrue($response->wasSuccessful());
+
+        $obj = $response->toObject();
+        $this->assertNotNull($obj->getId());
+        $this->assertNotNull($obj->getBody());
+        $this->assertNotNull($obj->getReference());
+        $this->assertNotNull($obj->getCreatedAt());
     }
 }

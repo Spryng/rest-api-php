@@ -3,19 +3,14 @@
 namespace Spryng\SpryngRestApi\Resources;
 
 use Spryng\SpryngRestApi\ApiResource;
+use Spryng\SpryngRestApi\BaseClient;
 use Spryng\SpryngRestApi\Http\HttpClient;
 use Spryng\SpryngRestApi\Http\Request;
 use Spryng\SpryngRestApi\Http\Response;
 use Spryng\SpryngRestApi\Objects\Message;
 
-class MessageClient extends ApiResource
+class MessageClient extends BaseClient
 {
-    protected $encoding;
-    protected $body;
-    protected $route;
-    protected $originator;
-    protected $recipients;
-
     /**
      * Sends the message to the recipients
      *
