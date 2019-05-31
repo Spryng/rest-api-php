@@ -52,4 +52,11 @@ class MessageTest extends TestCase
         $this->assertNotNull($obj->getReference());
         $this->assertNotNull($obj->getCreatedAt());
     }
+
+    public function testShowAll()
+    {
+        $response = $this->instance->message->showAll(1, 20);
+
+        
+    }
 }

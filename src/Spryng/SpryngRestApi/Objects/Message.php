@@ -3,7 +3,6 @@
 namespace Spryng\SpryngRestApi\Objects;
 
 use Spryng\SpryngRestApi\ApiResource;
-use Spryng\SpryngRestApi\Spryng;
 
 class Message extends ApiResource
 {

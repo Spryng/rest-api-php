@@ -2,8 +2,9 @@
 
 namespace Spryng\SpryngRestApi\Http;
 
+use Spryng\SpryngRestApi\ApiResource;
+use Spryng\SpryngRestApi\Objects\Balance;
 use Spryng\SpryngRestApi\Objects\Message;
-use Spryng\SpryngRestApi\Resources\Balance;
 
 class Response
 {
@@ -129,16 +130,17 @@ class Response
     /**
      * Return a deserialized object from the response
      *
-     * @return Message|Balance
+     * @return Message|Balance|array
      */
     public function toObject()
     {
-        // Check if the called url contains 'message' to see if we need to return a Message or Balance instance
+        // Wanted to keep this as simple as possible as there are only 2 objects in the API. Just check if the original
+        // url contains 'messages' to know which object to serialize to
         if (false !== strpos(curl_getinfo($this->curlInstance, CURLINFO_EFFECTIVE_URL), 'messages'))
         {
-            return new Message($this->getRawBody());
+            return ApiResource::deserializeFromRaw($this->getRawBody(), Message::class);
         }
 
-        return new Balance($this->getRawBody());
+        return ApiResource::deserializeFromRaw($this->getRawBody(), Balance::class);
     }
 }

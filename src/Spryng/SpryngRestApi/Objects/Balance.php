@@ -1,6 +1,6 @@
 <?php
 
-namespace Spryng\SpryngRestApi\Resources;
+namespace Spryng\SpryngRestApi\Objects;
 
 use Spryng\SpryngRestApi\ApiResource;
 

@@ -53,16 +53,20 @@ class MessageClient extends BaseClient
     /**
      * List previously sent messages, possibly with $filters
      *
+     * @param int $page
+     * @param int $limit
      * @param array $filters
      * @return Response
      */
-    public function list($filters = array())
+    public function showAll($page = 1, $limit = 15, $filters = array())
     {
         $req = (new Request(
             $this->api->getBaseUrl(),
             HttpClient::METHOD_GET,
             '/messages'
         ))
+            ->addQueryStringParameter('page', $page)
+            ->addQueryStringParameter('limit', $limit)
             ->withBearerToken($this->api->getApiKey());
 
         // Add the filters as query string parameters
