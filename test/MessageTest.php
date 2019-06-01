@@ -57,6 +57,15 @@ class MessageTest extends TestCase
     {
         $response = $this->instance->message->showAll(1, 20);
 
-        
+        $this->assertTrue($response->wasSuccessful());
+        $obj = $response->toObject();
+        // Check if the response is correctly parsed to objects for all the messages
+        if (count($obj->getData()) > 0)
+        {
+            foreach ($obj->getData() as $message)
+            {
+                $this->assertNotNull($message->getId());
+            }
+        }
     }
 }

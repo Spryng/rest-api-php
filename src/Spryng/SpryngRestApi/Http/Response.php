@@ -5,6 +5,7 @@ namespace Spryng\SpryngRestApi\Http;
 use Spryng\SpryngRestApi\ApiResource;
 use Spryng\SpryngRestApi\Objects\Balance;
 use Spryng\SpryngRestApi\Objects\Message;
+use Spryng\SpryngRestApi\Objects\MessageCollection;
 
 class Response
 {
@@ -130,7 +131,7 @@ class Response
     /**
      * Return a deserialized object from the response
      *
-     * @return Message|Balance|array
+     * @return Message|Balance|MessageCollection
      */
     public function toObject()
     {

@@ -76,11 +76,9 @@ class ApiResource
 
             // Get the name of the set method by capitalizing the first character of the key
             $name = 'set'.ucfirst($key);
-            if (!is_array($val))
-                echo $name.": ". $val."\n";
 
             // If there is such a set method, call it
-            if (method_exists('ApiResource', $name))
+            if (method_exists($class, $name))
             {
                 $obj->$name($val);
             }
