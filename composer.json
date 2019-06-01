@@ -9,6 +9,9 @@
             "email": "contact@roemerbaker.com"
         }
     ],
+    "keywords": [
+        "spryng", "sms", "php", "rest", "api", "text", "gateway"
+    ],
     "require": {
       "ext-curl": "*",
       "ext-json": "*"

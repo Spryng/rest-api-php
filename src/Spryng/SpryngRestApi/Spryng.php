@@ -8,7 +8,7 @@ use Spryng\SpryngRestApi\Resources\MessageClient;
 
 class Spryng
 {
-    const VERSION = '0.1.0';
+    const VERSION = '1.0.0';
 
     protected $baseUrl = 'https://rest.spryngsms.com/v1';
 
@@ -61,5 +61,15 @@ class Spryng
     public function getBaseUrl()
     {
         return $this->baseUrl;
+    }
+
+    /**
+     * Get the current version of the library
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return self::VERSION;
     }
 }
