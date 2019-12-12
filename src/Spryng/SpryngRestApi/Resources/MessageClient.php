@@ -30,6 +30,7 @@ class MessageClient extends BaseClient
             ->addParameter('route', $message->getRoute())
             ->addParameter('originator', $message->getOriginator())
             ->addParameter('recipients', $message->getRecipients())
+            ->addParameter('reference', $message->getReference())
             ->send();
     }
 
