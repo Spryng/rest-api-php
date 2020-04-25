@@ -5,7 +5,7 @@ namespace Spryng\SpryngRestApi\Objects;
 use Spryng\SpryngRestApi\ApiResource;
 
 class Message extends ApiResource
-{
+{    
     public $id;
     public $encoding = 'plain';
     public $body;
