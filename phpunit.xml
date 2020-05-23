@@ -24,7 +24,7 @@
         timeoutForLargeTests="60"
         verbose="true">
     <testsuites>
-        <testsuite name="php7-rest">
+        <testsuite name="spryng-rest-api">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>

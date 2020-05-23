@@ -1,3 +1,4 @@
 .apikey
+*.swp
 .idea/
 vendor/
