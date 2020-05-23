@@ -27,11 +27,10 @@ class MessageClient extends BaseClient
         'scheduled_from',
         'scheduled_until',
         'status'
-    ]
+    ];
 
     public function create(Message $message)
     {
-        Utils::assert($message->encoding);
         Utils::assert($message->body);
         Utils::assert($message->originator);
         Utils::assert($message->recipients);
@@ -48,15 +47,17 @@ class MessageClient extends BaseClient
             ->addParameter('originator', $message->getOriginator())
             ->addParameter('recipients', $message->getRecipients())
             ->addParameter('reference', $message->getReference())
+            ->addParameter('scheduled_at', $message->getScheduledAt())
             ->send();
     }
-    
+
     /**
      * List existing message instances. Use $filters to filter the results
      *
      * @param string[] $filters Filters to limit the results
-     * 
-     * @return Spryng\SpryngRestApi\Http\Response
+     *
+     * @return Response|null
+     * @throws ValidationException
      */
     public function list($filters = [])
     {
@@ -83,12 +84,16 @@ class MessageClient extends BaseClient
     /**
      * Cancel a message scheduled in the future.
      *
-     * @param mixed $id The ID of the message to be canceled
+     * @param string|Message $id The ID of the message to be canceled
      * 
-     * @return Spryng\SpryngRestApi\Http\Response
+     * @return Response
      */
     public function cancel($id)
     {
+        if ($id instanceof Message) // also allow message instances
+        {
+            $id = $id->getId();
+        }
         return (new Request(
             $this->api->getBaseUrl(),
             HttpClient::METHOD_POST,

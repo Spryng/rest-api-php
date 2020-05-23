@@ -2,7 +2,7 @@
 
 namespace Spryng\SpryngRestApi;
 
-use Spryng\SpryngRestApi\Exceptions;
+use Spryng\SpryngRestApi\Exceptions\ValidationException;
 
 class Utils
 {       
