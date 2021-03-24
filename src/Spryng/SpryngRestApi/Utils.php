@@ -17,7 +17,7 @@ class Utils
     public static function assert($expected, $actual = null)
     {
         if ($actual === null && !$expected) {
-            throw new ValidationException('\'%s\' cannot be null', $expected);
+            throw new ValidationException(sprintf('\'%s\' cannot be null', $expected));
         }
         if (!$expected || $actual !== null && $expected !== $actual) {
             throw new ValidationException(sprintf('Assertion failed. Got \'%s\' but expected \'%s\'.', $actual, $expected));
