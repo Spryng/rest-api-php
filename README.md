@@ -41,15 +41,15 @@ $response = $spryng->message->send($message);
 if ($response->wasSuccessful())
 {
 	$message = $response->toObject();
-	echo "Message with ID " . $message->getId() . " was send successfully!\n";
+	echo "Message with ID " . $message->getId() . " was sent successfully!\n";
 }
 else if ($response->serverError())
 {
-	echo "Message could not be send because of a server error...\n";
+	echo "Message could not be sent because of a server error...\n";
 }
 else
 {
-	echo "Message could not be send. Response code: " . $response->getResponseCode() ."\n";
+	echo "Message could not be sent. Response code: " . $response->getResponseCode() ."\n";
 }
 ```
 
@@ -73,7 +73,7 @@ if ($resposne->wasSuccessful())
 
 ### Listing messages
 
-You can list the messages you have send in a paginated manner. You can also apply filters to get a sub-set of the messages you have send:
+You can list the messages you have send in a paginated manner. You can also apply filters to get a sub-set of the messages you have sent:
 
 ```php
 use Spryng\SpryngRestApi\Objects\Message;
@@ -97,7 +97,7 @@ if ($response->wasSuccessful())
 	
 	foreach ($messages->getData() as $message)
 	{
-		echo sprintf("ID: %s ('%s') send on: %s\n", 
+		echo sprintf("ID: %s ('%s') sent on: %s\n", 
 			$message->getId(), 
 			$message->getBody(), 
 			$message->getCreatedAt()
