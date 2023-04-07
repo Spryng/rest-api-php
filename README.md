@@ -81,9 +81,7 @@ use Spryng\SpryngRestApi\Spryng;
 
 $spryng = new Spryng($apiKey);
 
-$response = $spryng->message->showAll(
-	1, // page
-	20, // limit: items per page
+$response = $spryng->message->list(
 	[ // An array of filters
 		'recipient_number' => '31612345667'
 	]
