@@ -15,7 +15,7 @@ class MessageClient extends BaseClient
 {
     /**
      * An array of the existing filters for the list endpoint
-     * 
+     *
      * @var string[]
      */
     private static $listFilters = [
@@ -75,17 +75,17 @@ class MessageClient extends BaseClient
                 throw new ValidationException(sprintf('%s is not a valid filter', $filter));
             }
 
-            $req->addQueryStringParameter($filter, $value);
+            $req->addQueryStringParameter(sprintf('filters[%s]', $filter), $value);
         }
 
         return $req->send();
     }
-    
+
     /**
      * Cancel a message scheduled in the future.
      *
      * @param string|Message $id The ID of the message to be canceled
-     * 
+     *
      * @return Response
      */
     public function cancel($id)
@@ -115,7 +115,7 @@ class MessageClient extends BaseClient
      * Show the message with $id
      *
      * @param $id The ID of the message to retrieve
-     * 
+     *
      * @return Spryng\SpryngRestApi\Http\Response
      */
     public function show($id)
